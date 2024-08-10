@@ -6,8 +6,6 @@ gameboard = (function () {
  		"C1": " ", "C2":" ", "C3":"O"
   };
 
-  const markSquare = (square, marker) => board[square] = marker;
-
   const drawBoard = () => {
   	console.log("-------------------")
   	console.log("|  " + Object.values(board).slice(0, 3).join("  |  ") + "  |")
@@ -16,6 +14,14 @@ gameboard = (function () {
   	console.log("-------------------")
   	console.log("|  " + Object.values(board).slice(6, 9).join("  |  ") + "  |")
   	console.log("-------------------")
+  }
+
+  const markSquare = (square, marker) => {
+  	board[square] = marker;
+  }
+
+  const checkSquare = (square) => {
+  	return board[square] === " ";
   }
 
   // Select specific row/column with specific marker.
@@ -41,12 +47,7 @@ gameboard = (function () {
 
   const boardFull = () => !Object.values(board).some((marker) => marker === " " )
 
-  return {
-  	markSquare,
-  	winner,
-  	drawBoard,
-  	boardFull
-  	}
+  return {markSquare, checkSquare, winner, drawBoard, boardFull}
 })
 
 function createPlayer (playerName) {
@@ -73,12 +74,22 @@ gamePlay = (function() {
 
 	const players = [player1, player2]
 
+	const playerResponse = () => {
+		let response
+
+		while (!game.checkSquare(response)) {
+			response = prompt(`${currentPlayer.name}, please select a square:`)
+			console.log("please enter valid square")
+		}
+
+		game.markSquare(response, currentPlayer.marker)
+	}
+
 	game.drawBoard()
 
 	while (!game.boardFull()) {
 		currentPlayer = players[0]
-		let response = prompt(`${currentPlayer.name}, please select a square:`)
-		game.markSquare(response, currentPlayer.marker)
+		playerResponse()
 		game.drawBoard()
 		players.reverse()
 
