@@ -24,6 +24,7 @@ gameboard = (function () {
   	return board[square] === " ";
   }
 
+
   // Select specific row/column with specific marker.
 
   const row = (letter, marker) => Object.entries(board).filter(([key, value]) => key[0] === (letter) && value === marker);
@@ -53,17 +54,22 @@ gameboard = (function () {
 function createPlayer (playerName) {
 	const name = playerName
 	let marker = ""
+	let score = 0
+
+	const win = function() {
+		this.score ++;
+	}
 
 	const setMarker = function(mark) {
 		this.marker = mark
 	}
 
-	return {name, marker, setMarker}
+	return {name, marker, setMarker, win, score}
 }
 
 gamePlay = (function() {
 
-	const game = gameboard()
+	let rounds = 3
 
 	let player1 = createPlayer("Billy")
 	let player2 = createPlayer("Bob")
@@ -74,33 +80,58 @@ gamePlay = (function() {
 
 	const players = [player1, player2]
 
-	const playerResponse = () => {
+	const playerResponse = (game) => {
 		let response
 
-		while (!game.checkSquare(response)) {
+		while (true) {
 			response = prompt(`${currentPlayer.name}, please select a square:`)
+			if (game.checkSquare(response)) break
 			console.log("please enter valid square")
 		}
 
 		game.markSquare(response, currentPlayer.marker)
 	}
 
-	game.drawBoard()
+	const gameWinner = () => {
+		let winner
 
-	while (!game.boardFull()) {
-		currentPlayer = players[0]
-		playerResponse()
-		game.drawBoard()
-		players.reverse()
-
-		if (game.winner(player1.marker)) break
+		if (player1.score > player2.score) {
+			winner = player1
+		} else if (player1.score < player2.score) {
+			winner = player2
+		}
+		return winner
 	}
+
+	const playRound = () => {
+		const game = gameboard()
+		// return
+
+		game.drawBoard()
+
+		while (!game.boardFull()) {
+			currentPlayer = players[0]
+			playerResponse(game)
+			game.drawBoard()
+			if (game.winner(player1.marker)) break
+			players.reverse()
+		}
 
 		if (game.boardFull()) {
 			console.log("Draw!")
 		} else {
-			console.log(`${currentPlayer.name} is the winner!`)
+			currentPlayer.win()
+			console.log(`${currentPlayer.name} is the winner with a score of ${currentPlayer.score}!`)
 		}
+	}
+
+
+	for (let i = 0; i < rounds; i++) {
+		playRound()
+	}
+
+	console.log(gameWinner())
+
 })
 
 gamePlay()
