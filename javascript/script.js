@@ -6,9 +6,7 @@ gameboard = (function () {
  		"C1": " ", "C2":" ", "C3":" "
   };
 
-  const setMarker = function(square, marker) {
-  	board[square] = marker
-  }
+  const setMarker = (square, marker) => board[square] = marker;
 
   const drawBoard = () => {
   	console.log("-------------------")
@@ -43,16 +41,39 @@ gameboard = (function () {
 
   return {
   	setMarker,
-  	board,
   	winner,
   	drawBoard
   	}
 })
 
+function createPlayer (playerName) {
+	const name = playerName
+	let marker = ""
+
+	const setMarker = function(mark) {
+		this.marker = mark
+	}
+
+	return {name, marker, setMarker}
+}
+
 const game = gameboard()
 
-game.drawBoard()
-console.log(game.winner("X"))
-game.setMarker("C1", "X")
-game.drawBoard()
-console.log(game.winner("X"))
+// game.drawBoard()
+// console.log(game.winner("X"))
+// game.setMarker("C1", "X")
+// game.drawBoard()
+// console.log(game.winner("X"))
+
+player1 = createPlayer("Billy")
+console.log(player1.name)
+console.log(player1.marker)
+player1.setMarker("Y")
+console.log(player1.marker)
+
+
+player2 = createPlayer("Lol")
+console.log(player2.name)
+console.log(player2.marker)
+player2.setMarker("X")
+console.log(player2.marker)
