@@ -1,23 +1,24 @@
 gameboard = (function () {
  
   let board = {
- 		"A1": "X", "A2":"X", "A3":"X",
- 		"B1": "X", "B2":"", "B3":"",
- 		"C1": "O", "C2":"", "C3":""
+ 		"A1": "X", "A2":"X", "A3":"O",
+ 		"B1": "X", "B2":" ", "B3":" ",
+ 		"C1": " ", "C2":" ", "C3":" "
   };
 
   const setMarker = function(square, marker) {
   	board[square] = marker
   }
 
-  let color = "black";
-
-  const changeColor = () => {
-    color = "white"
-  };
-
-
-  // let showBoard = () => board
+  const drawBoard = () => {
+  	console.log("-------------------")
+  	console.log("|  " + Object.values(board).slice(0, 3).join("  |  ") + "  |")
+  	console.log("-------------------")
+  	console.log("|  " + Object.values(board).slice(3, 6).join("  |  ") + "  |")
+  	console.log("-------------------")
+  	console.log("|  " + Object.values(board).slice(6, 9).join("  |  ") + "  |")
+  	console.log("-------------------")
+  }
 
   // Select specific row/column with specific marker.
 
@@ -36,23 +37,22 @@ gameboard = (function () {
     return colNumber.some((number) => column(number, marker).length === 3)
   };
 
+  const winner = function(marker) {
+  	return rowWinner(marker) || columnWinner(marker)
+  }
 
-
- 
   return {
-  	rows: (marker) => rowWinner(marker),
-  	columns: (marker) => columnWinner(marker),
   	setMarker,
-  	board
+  	board,
+  	winner,
+  	drawBoard
   	}
 })
 
 const game = gameboard()
 
-console.log(game.board)
+game.drawBoard()
+console.log(game.winner("X"))
 game.setMarker("C1", "X")
-console.log(game.board)
-console.log(game.columns("X"))
-
-
-
+game.drawBoard()
+console.log(game.winner("X"))
