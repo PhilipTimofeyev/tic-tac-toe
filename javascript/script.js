@@ -1,9 +1,9 @@
 gameboard = (function () {
  
   let board = {
- 		"A1": "X", "A2":" ", "A3":"O",
- 		"B1": "X", "B2":" ", "B3":"X",
- 		"C1": " ", "C2":" ", "C3":"O"
+ 		"A1": " ", "A2":" ", "A3":" ",
+ 		"B1": " ", "B2":" ", "B3":" ",
+ 		"C1": " ", "C2":" ", "C3":" "
   };
 
   const drawBoard = () => {
@@ -24,7 +24,6 @@ gameboard = (function () {
   	return board[square] === " ";
   }
 
-
   // Select specific row/column with specific marker.
 
   const row = (letter, marker) => Object.entries(board).filter(([key, value]) => key[0] === (letter) && value === marker);
@@ -42,8 +41,13 @@ gameboard = (function () {
     return colNumber.some((number) => column(number, marker).length === 3)
   };
 
+  const diagWinner = function(marker) {
+  	return ((board["A1"] == marker) && (board["B2"] == marker) && (board["C3"] == marker)) ||
+  	((board["A3"] == marker) && (board["B2"] == marker) && (board["C1"] == marker))
+  }
+
   const winner = function(marker) {
-  	return rowWinner(marker) || columnWinner(marker)
+  	return rowWinner(marker) || columnWinner(marker) || diagWinner(marker)
   }
 
   const boardFull = () => !Object.values(board).some((marker) => marker === " " )
@@ -69,7 +73,7 @@ function createPlayer (playerName) {
 
 gamePlay = (function() {
 
-	let rounds = 3
+	let rounds = 1
 
 	let player1 = createPlayer("Billy")
 	let player2 = createPlayer("Bob")
@@ -105,16 +109,18 @@ gamePlay = (function() {
 
 	const playRound = () => {
 		const game = gameboard()
+		// console.log("lol")
 		// return
 
 		game.drawBoard()
-
+		// return
 		while (!game.boardFull()) {
 			currentPlayer = players[0]
 			playerResponse(game)
 			game.drawBoard()
-			if (game.winner(player1.marker)) break
+			if (game.winner(currentPlayer.marker)) break
 			players.reverse()
+		// return
 		}
 
 		if (game.boardFull()) {
