@@ -2,11 +2,11 @@ gameboard = (function () {
  
   let board = {
  		"A1": "X", "A2":"X", "A3":"O",
- 		"B1": "X", "B2":" ", "B3":" ",
- 		"C1": " ", "C2":" ", "C3":" "
+ 		"B1": "O", "B2":"O", "B3":"X",
+ 		"C1": " ", "C2":" ", "C3":"O"
   };
 
-  const setMarker = (square, marker) => board[square] = marker;
+  const markSquare = (square, marker) => board[square] = marker;
 
   const drawBoard = () => {
   	console.log("-------------------")
@@ -39,10 +39,13 @@ gameboard = (function () {
   	return rowWinner(marker) || columnWinner(marker)
   }
 
+  const boardNotFull = () => Object.values(board).some((marker) => marker === " " )
+
   return {
-  	setMarker,
+  	markSquare,
   	winner,
-  	drawBoard
+  	drawBoard,
+  	boardNotFull
   	}
 })
 
@@ -57,23 +60,29 @@ function createPlayer (playerName) {
 	return {name, marker, setMarker}
 }
 
-const game = gameboard()
+gamePlay = (function() {
 
-// game.drawBoard()
-// console.log(game.winner("X"))
-// game.setMarker("C1", "X")
-// game.drawBoard()
-// console.log(game.winner("X"))
+	const game = gameboard()
 
-player1 = createPlayer("Billy")
-console.log(player1.name)
-console.log(player1.marker)
-player1.setMarker("Y")
-console.log(player1.marker)
+	let player1 = createPlayer("Billy")
+	let player2 = createPlayer("Bob")
 
+	player1.setMarker("X")
+	player2.setMarker("O")
 
-player2 = createPlayer("Lol")
-console.log(player2.name)
-console.log(player2.marker)
-player2.setMarker("X")
-console.log(player2.marker)
+	const players = [player1, player2]
+
+	game.drawBoard()
+
+	while (game.winner() || game.boardNotFull()) {
+		let currentPlayer = players[0]
+		let response = prompt(`${currentPlayer.name}, please select a square:`)
+		game.markSquare(response, currentPlayer.marker)
+		game.drawBoard()
+		players.reverse()
+
+		if (game.winner(player1.marker)) return
+	}
+})
+
+gamePlay()
