@@ -1,8 +1,8 @@
 gameboard = (function () {
  
   let board = {
- 		"A1": "X", "A2":"X", "A3":"O",
- 		"B1": "O", "B2":"O", "B3":"X",
+ 		"A1": "X", "A2":" ", "A3":"O",
+ 		"B1": "X", "B2":" ", "B3":"X",
  		"C1": " ", "C2":" ", "C3":"O"
   };
 
@@ -39,13 +39,13 @@ gameboard = (function () {
   	return rowWinner(marker) || columnWinner(marker)
   }
 
-  const boardNotFull = () => Object.values(board).some((marker) => marker === " " )
+  const boardFull = () => !Object.values(board).some((marker) => marker === " " )
 
   return {
   	markSquare,
   	winner,
   	drawBoard,
-  	boardNotFull
+  	boardFull
   	}
 })
 
@@ -66,6 +66,7 @@ gamePlay = (function() {
 
 	let player1 = createPlayer("Billy")
 	let player2 = createPlayer("Bob")
+	let currentPlayer
 
 	player1.setMarker("X")
 	player2.setMarker("O")
@@ -74,15 +75,21 @@ gamePlay = (function() {
 
 	game.drawBoard()
 
-	while (game.winner() || game.boardNotFull()) {
-		let currentPlayer = players[0]
+	while (!game.boardFull()) {
+		currentPlayer = players[0]
 		let response = prompt(`${currentPlayer.name}, please select a square:`)
 		game.markSquare(response, currentPlayer.marker)
 		game.drawBoard()
 		players.reverse()
 
-		if (game.winner(player1.marker)) return
+		if (game.winner(player1.marker)) break
 	}
+
+		if (game.boardFull()) {
+			console.log("Draw!")
+		} else {
+			console.log(`${currentPlayer.name} is the winner!`)
+		}
 })
 
 gamePlay()
