@@ -109,26 +109,22 @@ gamePlay = (function() {
 
 	const playRound = () => {
 		const game = gameboard()
-		// console.log("lol")
-		// return
 
 		game.drawBoard()
-		// return
-		while (!game.boardFull()) {
-			currentPlayer = players[0]
-			playerResponse(game)
-			game.drawBoard()
-			if (game.winner(currentPlayer.marker)) break
-			players.reverse()
-		// return
-		}
+		// while (!game.boardFull()) {
+		// 	currentPlayer = players[0]
+		// 	playerResponse(game)
+		// 	game.drawBoard()
+		// 	if (game.winner(currentPlayer.marker)) break
+		// 	players.reverse()
+		// }
 
-		if (game.boardFull()) {
-			console.log("Draw!")
-		} else {
-			currentPlayer.win()
-			console.log(`${currentPlayer.name} is the winner with a score of ${currentPlayer.score}!`)
-		}
+		// if (game.boardFull()) {
+		// 	console.log("Draw!")
+		// } else {
+		// 	currentPlayer.win()
+		// 	console.log(`${currentPlayer.name} is the winner with a score of ${currentPlayer.score}!`)
+		// }
 	}
 
 
