@@ -1,0 +1,30 @@
+
+body {
+	margin: 0;
+	padding: 0;
+}
+
+h1 {
+	text-align: center;
+}
+
+#board {
+	min-height: 90vh;
+	align-content: center;
+	height: 100%;
+}
+
+#board div {
+	display: flex;
+	justify-content: center;
+}
+
+#board span {
+	display: flex;
+	border: solid black;
+	font-size: 3em;
+	width: 200px;
+	height: 200px;
+	justify-content: center;
+	align-items: center;
+}
