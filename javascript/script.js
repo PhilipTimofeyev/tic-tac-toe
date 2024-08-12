@@ -17,7 +17,7 @@ gameboard = (function () {
   }
 
   const markSquare = (square, marker) => {
-  	console.log(square)
+  	// console.log(square)
   	let squareID = square.id
   	board[squareID].innerText = marker;
   }
@@ -28,8 +28,11 @@ gameboard = (function () {
 
   // Select specific row/column with specific marker.
 
-  const row = (letter, marker) => Object.entries(board).filter(([key, value]) => key[0] === (letter) && value === marker);
-  const column = (number, marker) => Object.entries(board).filter(([key, value]) => key[1] === (number) && value === marker);
+  // const row = (letter, marker) => Object.entries(board).filter(([key, value]) => key[0] === (letter) && value === marker);
+
+  const row = (letter, marker) => Object.entries(board).filter(([key, value]) => (key[0] === letter) && (value.innerText === marker));
+
+  const column = (number, marker) => Object.entries(board).filter(([key, value]) => key[1] === (number) && (value.innerText === marker));
 
   // Iterate through each row/column and check if there are 3 of the same marker.
 
@@ -44,17 +47,21 @@ gameboard = (function () {
   };
 
   const diagWinner = function(marker) {
-  	return ((board["A1"] == marker) && (board["B2"] == marker) && (board["C3"] == marker)) ||
-  	((board["A3"] == marker) && (board["B2"] == marker) && (board["C1"] == marker))
+  	console.log(board["A1"].innerText)
+  	return ((board["A1"].innerText == marker) && (board["B2"].innerText == marker) && (board["C3"].innerText == marker)) ||
+  	((board["A3"].innerText == marker) && (board["B2"].innerText == marker) && (board["C1"].innerText == marker))
   }
 
   const winner = function(marker) {
+  	console.log(rowWinner(marker))
   	return rowWinner(marker) || columnWinner(marker) || diagWinner(marker)
   }
 
-  const boardFull = () => !Object.values(board).some((marker) => marker === " " )
+  const boardFull = () => {
+  	return !Object.values(board).some((marker) => { return marker.innerText === ""})
+	}
 
-  // DOM Display
+  // Assign DOM elements to board object
 
   const domBoard = document.querySelectorAll("span")
 
@@ -107,19 +114,23 @@ gamePlay = (function() {
 	// }
 
 	function reversePlayers() {
-		console.log(players[0])
 		players.reverse()
-		// alert("noo")
 	}
 
 
 	const playerResponse = (game) => {
 		Object.values(game.board).forEach(function (square, idx) {
-  		square.addEventListener("click", function(){
-    	game.markSquare(square, players[0].marker);
-    	reversePlayers();
-		}, false);
-  });
+  		square.addEventListener("click", function() {
+    		game.markSquare(square, players[0].marker);
+    		if (game.boardFull()) {
+    			alert("board Full");
+    		} else if (game.winner(players[0].marker)) {
+    			alert("winner")
+    		} else {
+    			reversePlayers()
+    		};
+			});
+  	});
 	}
 
 	const gameWinner = () => {
@@ -140,6 +151,7 @@ gamePlay = (function() {
 		// while (!game.boardFull()) {
 
 			playerResponse(game)
+			// console.log(game.boardFull())
 		// 	playerResponse(game)
 		// 	game.drawBoard()
 		// 	if (game.winner(currentPlayer.marker)) break
@@ -159,7 +171,7 @@ gamePlay = (function() {
 		playRound()
 	}
 
-	console.log(gameWinner())
+	// console.log(gameWinner())
 
 })
 
