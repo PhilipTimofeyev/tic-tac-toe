@@ -47,13 +47,11 @@ gameboard = (function () {
   };
 
   const diagWinner = function(marker) {
-  	console.log(board["A1"].innerText)
   	return ((board["A1"].innerText == marker) && (board["B2"].innerText == marker) && (board["C3"].innerText == marker)) ||
   	((board["A3"].innerText == marker) && (board["B2"].innerText == marker) && (board["C1"].innerText == marker))
   }
 
   const winner = function(marker) {
-  	console.log(rowWinner(marker))
   	return rowWinner(marker) || columnWinner(marker) || diagWinner(marker)
   }
 
@@ -102,11 +100,16 @@ gamePlay = (function() {
 	player2.setMarker("O")
 
 	const players = [player1, player2]
-	let currentPlayer = players[0]
+
+	let currentRound = 1;
+	const addRound = (function () {
+	 return function () {
+	   currentRound += 1;
+	 };
+	})();
 
 	function reversePlayers() {
 		players.reverse()
-		console.log(players)
 	}
 
 	function playerTurn(game, square, marker) {
@@ -114,19 +117,6 @@ gamePlay = (function() {
 			game.markSquare(square, marker);
 			reversePlayers();
 		}
-	}
-
-	const playerResponseOLD = (game, i) => {
-		console.log(i)
-		Object.values(game.board).forEach(function (square, idx) {
-  		square.addEventListener("click", function() {
-    		playerTurn(game, square, players[0].marker);
-    		if (game.winner(players[1].marker)) {
-    			alert(`${players[1].name} is winner`);
-    		} else if (game.boardFull()) {
-    			alert("board Full");
-			}});
-  	});
 	}
 
 	const addClick = (game) => {
@@ -157,8 +147,11 @@ gamePlay = (function() {
 		if (game.winner(players[1].marker)) {
 			alert(`${players[1].name} is winner`);
 			removeClick(game)
+			addRound()
+			console.log(currentRound)
 		} else if (game.boardFull()) {
 			alert("board Full");
+			addRound()
 		}
 	}
 
@@ -176,21 +169,6 @@ gamePlay = (function() {
 	const playRound = () => {
 		game.resetBoard()
 		addClick(game)
-
-		// }
-			// console.log(game.boardFull())
-		// 	playerResponse(game)
-		// 	game.drawBoard()
-		// 	if (game.winner(currentPlayer.marker)) break
-			// players.reverse()
-		// }
-
-		// if (game.boardFull()) {
-		// 	console.log("Draw!")
-		// } else {
-		// 	currentPlayer.win()
-		// 	console.log(`${currentPlayer.name} is the winner with a score of ${currentPlayer.score}!`)
-		// }
 	}
 
 
