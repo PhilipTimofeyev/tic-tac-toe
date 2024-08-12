@@ -110,9 +110,6 @@ gamePlay = (function() {
 	player1.domScore = dom.player1Score
 	player2.domScore = dom.player2Score
 
-	console.log(player1.domScore)
-
-
 	const players = [player1, player2]
 
 
@@ -138,6 +135,11 @@ gamePlay = (function() {
 			game.markSquare(square, marker);
 			reversePlayers();
 		}
+	}
+
+	function setDraw() {
+		player1.domScore.innerText = "Draw";
+		player2.domScore.innerText = "Draw";
 	}
 
 	const addClick = (game) => {
@@ -166,6 +168,8 @@ gamePlay = (function() {
 		game.resetBoard();
 		addClick(game)
 		addRound()
+		player1.domScore.innerText = player1.score
+		player2.domScore.innerText = player2.score
 	})
 
 	function handleClick() {
@@ -176,7 +180,7 @@ gamePlay = (function() {
 			removeClick(game)
 			updateScore(players[1])
 		} else if (game.boardFull()) {
-			alert("board Full");
+			setDraw()
 		}
 	}
 
