@@ -1,5 +1,5 @@
 gameboard = (function () {
- 
+
   let board = {
  		"A1": " ", "A2":" ", "A3":" ",
  		"B1": " ", "B2":" ", "B3":" ",
@@ -17,7 +17,9 @@ gameboard = (function () {
   }
 
   const markSquare = (square, marker) => {
-  	board[square] = marker;
+  	console.log(square)
+  	let squareID = square.id
+  	board[squareID].innerText = marker;
   }
 
   const checkSquare = (square) => {
@@ -52,7 +54,15 @@ gameboard = (function () {
 
   const boardFull = () => !Object.values(board).some((marker) => marker === " " )
 
-  return {markSquare, checkSquare, winner, drawBoard, boardFull}
+  // DOM Display
+
+  const domBoard = document.querySelectorAll("span")
+
+  Object.entries(board).forEach(function(key, idx) {
+  	board[key[0]] = domBoard[idx]
+  })
+
+  return {markSquare, checkSquare, winner, drawBoard, boardFull, board}
 })
 
 function createPlayer (playerName) {
@@ -84,16 +94,32 @@ gamePlay = (function() {
 
 	const players = [player1, player2]
 
+	// const playerResponse = (game) => {
+		// let response
+
+		// while (true) {
+			// response = prompt(`${currentPlayer.name}, please select a square:`)
+			// if (game.checkSquare(response)) break
+			// console.log("please enter valid square")
+		// }
+
+		// game.markSquare(response, currentPlayer.marker)
+	// }
+
+	function reversePlayers() {
+		console.log(players[0])
+		players.reverse()
+		// alert("noo")
+	}
+
+
 	const playerResponse = (game) => {
-		let response
-
-		while (true) {
-			response = prompt(`${currentPlayer.name}, please select a square:`)
-			if (game.checkSquare(response)) break
-			console.log("please enter valid square")
-		}
-
-		game.markSquare(response, currentPlayer.marker)
+		Object.values(game.board).forEach(function (square, idx) {
+  		square.addEventListener("click", function(){
+    	game.markSquare(square, players[0].marker);
+    	reversePlayers();
+		}, false);
+  });
 	}
 
 	const gameWinner = () => {
@@ -110,13 +136,14 @@ gamePlay = (function() {
 	const playRound = () => {
 		const game = gameboard()
 
-		game.drawBoard()
+		// game.drawBoard()
 		// while (!game.boardFull()) {
-		// 	currentPlayer = players[0]
+
+			playerResponse(game)
 		// 	playerResponse(game)
 		// 	game.drawBoard()
 		// 	if (game.winner(currentPlayer.marker)) break
-		// 	players.reverse()
+			// players.reverse()
 		// }
 
 		// if (game.boardFull()) {
@@ -137,3 +164,11 @@ gamePlay = (function() {
 })
 
 gamePlay()
+
+
+
+
+
+
+
+

@@ -12,6 +12,7 @@ h1 {
 	min-height: 90vh;
 	align-content: center;
 	height: 100%;
+/*	border: none;*/
 }
 
 #board div {
