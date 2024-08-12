@@ -17,13 +17,13 @@ gameboard = (function () {
   }
 
   const markSquare = (square, marker) => {
-  	// console.log(square)
   	let squareID = square.id
   	board[squareID].innerText = marker;
   }
 
   const checkSquare = (square) => {
-  	return board[square] === " ";
+  	let squareID = square.id
+  	return board[squareID].innerText === "";
   }
 
   // Select specific row/column with specific marker.
@@ -117,17 +117,22 @@ gamePlay = (function() {
 		players.reverse()
 	}
 
+	function playerTurn(game, square, marker) {
+		if (game.checkSquare(square)) {
+			game.markSquare(square, marker);
+			reversePlayers();
+		}
+	}
+
 
 	const playerResponse = (game) => {
 		Object.values(game.board).forEach(function (square, idx) {
   		square.addEventListener("click", function() {
-    		game.markSquare(square, players[0].marker);
+    		playerTurn(game, square, players[0].marker);
     		if (game.boardFull()) {
     			alert("board Full");
     		} else if (game.winner(players[0].marker)) {
     			alert("winner")
-    		} else {
-    			reversePlayers()
     		};
 			});
   	});
