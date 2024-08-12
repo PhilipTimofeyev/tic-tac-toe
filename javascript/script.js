@@ -75,18 +75,20 @@ gameboard = (function () {
 
 function createPlayer (playerName) {
 	const name = playerName
+	let domScore
 	let marker = ""
 	let score = 0
 
 	const win = function() {
 		this.score ++;
+		this.domScore.innerText = this.score
 	}
 
 	const setMarker = function(mark) {
 		this.marker = mark
 	}
 
-	return {name, marker, setMarker, win, score}
+	return {name, marker, setMarker, win, score, domScore}
 }
 
 gamePlay = (function() {
@@ -96,10 +98,18 @@ gamePlay = (function() {
 	let player1 = createPlayer("Billy")
 	let player2 = createPlayer("Bob")
 
+	let dom = domElements()
+
 	player1.setMarker("X")
 	player2.setMarker("O")
+	player1.domScore = dom.player1Score
+	player2.domScore = dom.player2Score
+
+	console.log(player1.domScore)
+
 
 	const players = [player1, player2]
+
 
 	let currentRound = 1;
 	const addRound = (function () {
@@ -148,11 +158,15 @@ gamePlay = (function() {
 			alert(`${players[1].name} is winner`);
 			removeClick(game)
 			addRound()
-			console.log(currentRound)
+			updateScore(players[1])
 		} else if (game.boardFull()) {
 			alert("board Full");
 			addRound()
 		}
+	}
+
+	function updateScore(player) {
+		player.win();
 	}
 
 	const gameWinner = () => {
@@ -178,6 +192,15 @@ gamePlay = (function() {
 
 	// console.log(gameWinner())
 
+})
+
+domElements = (function () {
+	const player1Score = document.getElementById("p1-score")
+	const player2Score = document.getElementById("p2-score")
+
+	return {
+		player1Score, player2Score
+	}
 })
 
 gamePlay()
