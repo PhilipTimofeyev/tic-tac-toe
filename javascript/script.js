@@ -88,13 +88,18 @@ function createPlayer (playerName) {
 		this.marker = mark
 	}
 
-	return {name, marker, setMarker, win, score, domScore}
+	const resetScore = function() {
+		this.score = 0;
+		this.domScore.innerText = this.score
+	}
+
+	return {name, marker, setMarker, win, score, domScore, resetScore}
 }
 
 gamePlay = (function() {
 
 	let rounds = 1
-
+	let currentRound = 1;
 	let player1 = createPlayer("Billy")
 	let player2 = createPlayer("Bob")
 
@@ -111,12 +116,18 @@ gamePlay = (function() {
 	const players = [player1, player2]
 
 
-	let currentRound = 1;
 	const addRound = (function () {
 	 return function () {
 	   currentRound += 1;
+	   console.log(dom.round.innerText = `Round: ${currentRound}`)
 	 };
 	})();
+
+	function resetPlayerScore() {
+		players.forEach((player) => {
+			player.resetScore()
+		})
+	}
 
 	function reversePlayers() {
 		players.reverse()
@@ -148,8 +159,14 @@ gamePlay = (function() {
 	resetBtn.addEventListener('click', function() {
 		game.resetBoard();
 		addClick(game)
-	}
-		)
+		resetPlayerScore()
+	})
+
+	dom.nextRoundBtn.addEventListener('click', function() {
+		game.resetBoard();
+		addClick(game)
+		addRound()
+	})
 
 	function handleClick() {
 		playerTurn(game, this, players[0].marker);
@@ -157,11 +174,9 @@ gamePlay = (function() {
 		if (game.winner(players[1].marker)) {
 			alert(`${players[1].name} is winner`);
 			removeClick(game)
-			addRound()
 			updateScore(players[1])
 		} else if (game.boardFull()) {
 			alert("board Full");
-			addRound()
 		}
 	}
 
@@ -195,11 +210,20 @@ gamePlay = (function() {
 })
 
 domElements = (function () {
+
+	// Round Info
+	const round = document.getElementById("round")
+
+	// Player Info
 	const player1Score = document.getElementById("p1-score")
 	const player2Score = document.getElementById("p2-score")
 
+	// Reset Buttons
+
+	const nextRoundBtn = document.getElementById("next-round-btn")
+
 	return {
-		player1Score, player2Score
+		player1Score, player2Score, round, nextRoundBtn
 	}
 })
 
