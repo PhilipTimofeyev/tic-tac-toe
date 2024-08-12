@@ -61,15 +61,18 @@ gameboard = (function () {
   	return !Object.values(board).some((marker) => { return marker.innerText === ""})
 	}
 
-  // Assign DOM elements to board object
+  // Assign DOM elements
 
   const domBoard = document.querySelectorAll("span")
 
-  Object.entries(board).forEach(function(key, idx) {
-  	board[key[0]] = domBoard[idx]
-  })
+  function resetBoard() {
+  	Object.entries(board).forEach(function(key, idx) {
+  		board[key[0]] = domBoard[idx]
+  		domBoard[idx].innerText = ""
+  	})
+  }
 
-  return {markSquare, checkSquare, winner, drawBoard, boardFull, board}
+  return {markSquare, checkSquare, winner, drawBoard, boardFull, board, resetBoard}
 })
 
 function createPlayer (playerName) {
@@ -94,27 +97,16 @@ gamePlay = (function() {
 
 	let player1 = createPlayer("Billy")
 	let player2 = createPlayer("Bob")
-	let currentPlayer
 
 	player1.setMarker("X")
 	player2.setMarker("O")
 
 	const players = [player1, player2]
-
-	// const playerResponse = (game) => {
-		// let response
-
-		// while (true) {
-			// response = prompt(`${currentPlayer.name}, please select a square:`)
-			// if (game.checkSquare(response)) break
-			// console.log("please enter valid square")
-		// }
-
-		// game.markSquare(response, currentPlayer.marker)
-	// }
+	let currentPlayer = players[0]
 
 	function reversePlayers() {
 		players.reverse()
+		console.log(players)
 	}
 
 	function playerTurn(game, square, marker) {
@@ -124,18 +116,50 @@ gamePlay = (function() {
 		}
 	}
 
-
-	const playerResponse = (game) => {
+	const playerResponseOLD = (game, i) => {
+		console.log(i)
 		Object.values(game.board).forEach(function (square, idx) {
   		square.addEventListener("click", function() {
     		playerTurn(game, square, players[0].marker);
-    		if (game.boardFull()) {
+    		if (game.winner(players[1].marker)) {
+    			alert(`${players[1].name} is winner`);
+    		} else if (game.boardFull()) {
     			alert("board Full");
-    		} else if (game.winner(players[0].marker)) {
-    			alert("winner")
-    		};
-			});
+			}});
   	});
+	}
+
+	const addClick = (game) => {
+		Object.values(game.board).forEach(function (square, idx) {
+  		square.addEventListener("click", handleClick)
+  	});
+	}
+
+	const removeClick = (game) => {
+		Object.values(game.board).forEach(function (square, idx) {
+  		square.removeEventListener("click", handleClick)
+  	});
+	}
+
+	const game = gameboard()
+
+	const resetBtn = document.getElementById("reset-board")
+
+	resetBtn.addEventListener('click', function() {
+		game.resetBoard();
+		addClick(game)
+	}
+		)
+
+	function handleClick() {
+		playerTurn(game, this, players[0].marker);
+
+		if (game.winner(players[1].marker)) {
+			alert(`${players[1].name} is winner`);
+			removeClick(game)
+		} else if (game.boardFull()) {
+			alert("board Full");
+		}
 	}
 
 	const gameWinner = () => {
@@ -150,12 +174,10 @@ gamePlay = (function() {
 	}
 
 	const playRound = () => {
-		const game = gameboard()
+		game.resetBoard()
+		addClick(game)
 
-		// game.drawBoard()
-		// while (!game.boardFull()) {
-
-			playerResponse(game)
+		// }
 			// console.log(game.boardFull())
 		// 	playerResponse(game)
 		// 	game.drawBoard()
