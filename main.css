@@ -19,6 +19,7 @@ h1 {
 input {
 	font-size: .6em;
 	text-align: center;
+	border: solid black 5px;
 }
 
 #display-winner {
@@ -76,4 +77,8 @@ input {
 #next-round-btn,
 #reset-board {
 	font-size: 2.5em;
+}
+
+#next-round-btn {
+	visibility: hidden;
 }

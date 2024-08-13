@@ -100,12 +100,10 @@ gamePlay = (function() {
 
 	let rounds = 2
 	let currentRound = 1;
-	let player1 = createPlayer("Billy")
-	let player2 = createPlayer("Bob")
+	let player1 = createPlayer("Player 1")
+	let player2 = createPlayer("Player 2")
 
 	let dom = domElements()
-
-	console.log(dom.player1Name.value)
 
 	player1.setMarker("X")
 	player2.setMarker("O")
@@ -116,7 +114,6 @@ gamePlay = (function() {
 	dom.player2Name.addEventListener("input", updateName);
 
 	function updateName(e) {
-		console.log(e.target)
 		if (e.target.id === "player1-name") {
 			player1.name = e.target.value;
 		} else {
@@ -124,7 +121,7 @@ gamePlay = (function() {
 		}
 	}
 
-	const players = [player1, player2]
+	let players = [player1, player2]
 
 	const addRound = (function () {
 	 return function () {
@@ -141,12 +138,20 @@ gamePlay = (function() {
 
 	function reversePlayers() {
 		players.reverse()
+		if (players[0].marker === 'X') {
+			dom.score.childNodes[1].style.background="green"
+			dom.score.childNodes[3].style.background="none"
+		} else {
+			dom.score.childNodes[3].style.background="green"
+			dom.score.childNodes[1].style.background="none"
+		}
 	}
 
 	function playerTurn(game, square, marker) {
 		if (game.checkSquare(square)) {
 			game.markSquare(square, marker);
 			reversePlayers();
+			// dom.displayWinner.innerText = `${players[0].name}'s turn`
 		}
 	}
 
@@ -176,16 +181,20 @@ gamePlay = (function() {
 		resetPlayerScore()
 		resetDisplayWinner()
 		resetRound()
+		players = [player1, player2]
+		dom.score.childNodes[1].style.background="green"
+		dom.score.childNodes[3].style.background="none"
 		dom.nextRoundBtn.style.visibility = "hidden"
 	})
 
 	dom.nextRoundBtn.addEventListener('click', function() {
 		game.resetBoard();
-		addClick(game)
-		addRound()
-		resetDisplayWinner()
-		player1.domScore.innerText = player1.score
-		player2.domScore.innerText = player2.score
+		dom.score;
+		addClick(game);
+		addRound();
+		resetDisplayWinner();
+		player1.domScore.innerText = player1.score;
+		player2.domScore.innerText = player2.score;
 		this.style.visibility="hidden"
 	})
 
@@ -235,6 +244,7 @@ gamePlay = (function() {
 
 	const playRound = () => {
 		game.resetBoard()
+		dom.score.childNodes[1].style.background="green"
 		addClick(game)
 	}
 
@@ -261,8 +271,11 @@ domElements = (function () {
 	// Reset Buttons
 	const nextRoundBtn = document.getElementById("next-round-btn")
 
+	// Score
+	const score = document.getElementById("score")
+
 	return {
-		player1Score, player2Score, round, nextRoundBtn, displayWinner, player1Name, player2Name
+		player1Score, player2Score, round, nextRoundBtn, displayWinner, player1Name, player2Name, score
 	}
 })
 
