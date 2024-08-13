@@ -98,7 +98,7 @@ function createPlayer (playerName) {
 
 gamePlay = (function() {
 
-	let rounds = 1
+	let rounds = 2
 	let currentRound = 1;
 	let player1 = createPlayer("Billy")
 	let player2 = createPlayer("Bob")
@@ -112,11 +112,10 @@ gamePlay = (function() {
 
 	const players = [player1, player2]
 
-
 	const addRound = (function () {
 	 return function () {
 	   currentRound += 1;
-	   console.log(dom.round.innerText = `Round: ${currentRound}`)
+	   dom.round.innerText = `Round: ${currentRound}`
 	 };
 	})();
 
@@ -162,12 +161,15 @@ gamePlay = (function() {
 		game.resetBoard();
 		addClick(game)
 		resetPlayerScore()
+		resetDisplayWinner()
+		resetRound()
 	})
 
 	dom.nextRoundBtn.addEventListener('click', function() {
 		game.resetBoard();
 		addClick(game)
 		addRound()
+		resetDisplayWinner()
 		player1.domScore.innerText = player1.score
 		player2.domScore.innerText = player2.score
 	})
@@ -175,8 +177,11 @@ gamePlay = (function() {
 	function handleClick() {
 		playerTurn(game, this, players[0].marker);
 
-		if (game.winner(players[1].marker)) {
-			alert(`${players[1].name} is winner`);
+		if (currentRound >= rounds && (game.winner(players[1].marker) || game.boardFull())) {
+			removeClick(game)
+			updateScore(players[1])
+			dom.displayWinner.innerText = gameWinner()
+		} else if (game.winner(players[1].marker)) {
 			removeClick(game)
 			updateScore(players[1])
 		} else if (game.boardFull()) {
@@ -184,19 +189,31 @@ gamePlay = (function() {
 		}
 	}
 
+	function resetRound() {
+		currentRound = 1;
+		dom.round.innerText = `Round: ${currentRound}`
+	}
+
 	function updateScore(player) {
 		player.win();
+		dom.displayWinner.innerText = `${player.name} wins the round!`
 	}
 
 	const gameWinner = () => {
 		let winner
 
 		if (player1.score > player2.score) {
-			winner = player1
+			winner = `${player1.name} wins the game!`
 		} else if (player1.score < player2.score) {
-			winner = player2
+			winner = `${player2.name} wins the game!`
+		} else {
+			winner = "The game is a draw!"
 		}
 		return winner
+	}
+
+	function resetDisplayWinner() {
+		dom.displayWinner.innerText = ""
 	}
 
 	const playRound = () => {
@@ -222,12 +239,16 @@ domElements = (function () {
 	const player1Score = document.getElementById("p1-score")
 	const player2Score = document.getElementById("p2-score")
 
-	// Reset Buttons
+	// Winner Display
+	const displayWinner = document.getElementById("display-winner")
 
+	// Reset Buttons
 	const nextRoundBtn = document.getElementById("next-round-btn")
 
+
+
 	return {
-		player1Score, player2Score, round, nextRoundBtn
+		player1Score, player2Score, round, nextRoundBtn, displayWinner
 	}
 })
 

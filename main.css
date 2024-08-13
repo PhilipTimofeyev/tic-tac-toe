@@ -15,6 +15,15 @@ h1 {
 	margin: 0;
 }
 
+#display-winner {
+	text-align: center;
+	font-size: 2.5em;
+}
+
+#display-winner:after {
+    content: '\200b';
+}
+
 .score {
 	display: flex;
 	justify-content: center;
@@ -24,10 +33,11 @@ h1 {
 
 .score p {
 	text-align: center;
+	margin-bottom: 0;
 }
 
 #board {
-	min-height: 60vh;
+	min-height: 50vh;
 	align-content: center;
 	height: 100%;
 /*	border: none;*/
