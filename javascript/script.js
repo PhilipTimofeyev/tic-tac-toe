@@ -105,10 +105,24 @@ gamePlay = (function() {
 
 	let dom = domElements()
 
+	console.log(dom.player1Name.value)
+
 	player1.setMarker("X")
 	player2.setMarker("O")
 	player1.domScore = dom.player1Score
 	player2.domScore = dom.player2Score
+
+	dom.player1Name.addEventListener("input", updateName);
+	dom.player2Name.addEventListener("input", updateName);
+
+	function updateName(e) {
+		console.log(e.target)
+		if (e.target.id === "player1-name") {
+			player1.name = e.target.value;
+		} else {
+			player2.name = e.target.value;
+		}
+	}
 
 	const players = [player1, player2]
 
@@ -238,6 +252,8 @@ domElements = (function () {
 	// Player Info
 	const player1Score = document.getElementById("p1-score")
 	const player2Score = document.getElementById("p2-score")
+	const player1Name = document.getElementById("player1-name")
+	const player2Name = document.getElementById("player2-name")
 
 	// Winner Display
 	const displayWinner = document.getElementById("display-winner")
@@ -246,7 +262,7 @@ domElements = (function () {
 	const nextRoundBtn = document.getElementById("next-round-btn")
 
 	return {
-		player1Score, player2Score, round, nextRoundBtn, displayWinner
+		player1Score, player2Score, round, nextRoundBtn, displayWinner, player1Name, player2Name
 	}
 })
 
