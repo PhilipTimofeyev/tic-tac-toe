@@ -162,6 +162,7 @@ gamePlay = (function() {
 		resetPlayerScore()
 		resetDisplayWinner()
 		resetRound()
+		dom.nextRoundBtn.style.visibility = "hidden"
 	})
 
 	dom.nextRoundBtn.addEventListener('click', function() {
@@ -171,6 +172,7 @@ gamePlay = (function() {
 		resetDisplayWinner()
 		player1.domScore.innerText = player1.score
 		player2.domScore.innerText = player2.score
+		this.style.visibility="hidden"
 	})
 
 	function handleClick() {
@@ -183,8 +185,10 @@ gamePlay = (function() {
 		} else if (game.winner(players[1].marker)) {
 			removeClick(game)
 			updateScore(players[1])
+			dom.nextRoundBtn.style.visibility = "visible"
 		} else if (game.boardFull()) {
 			setDraw()
+			dom.nextRoundBtn.style.visibility = "visible"
 		}
 	}
 
@@ -219,6 +223,11 @@ gamePlay = (function() {
 		game.resetBoard()
 		addClick(game)
 	}
+
+	playRound()
+
+
+
 })
 
 domElements = (function () {
