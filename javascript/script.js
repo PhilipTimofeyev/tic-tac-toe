@@ -28,8 +28,6 @@ gameboard = (function () {
 
   // Select specific row/column with specific marker.
 
-  // const row = (letter, marker) => Object.entries(board).filter(([key, value]) => key[0] === (letter) && value === marker);
-
   const row = (letter, marker) => Object.entries(board).filter(([key, value]) => (key[0] === letter) && (value.innerText === marker));
 
   const column = (number, marker) => Object.entries(board).filter(([key, value]) => key[1] === (number) && (value.innerText === marker));
@@ -98,7 +96,9 @@ function createPlayer (playerName) {
 
 gamePlay = (function() {
 
-	let rounds = 2
+	const game = gameboard()
+
+	let rounds = 3
 	let currentRound = 1;
 	let player1 = createPlayer("Player 1")
 	let player2 = createPlayer("Player 2")
@@ -112,6 +112,8 @@ gamePlay = (function() {
 
 	dom.player1Name.addEventListener("input", updateName);
 	dom.player2Name.addEventListener("input", updateName);
+
+	const resetBtn = document.getElementById("reset-board")
 
 	function updateName(e) {
 		if (e.target.id === "player1-name") {
@@ -151,7 +153,6 @@ gamePlay = (function() {
 		if (game.checkSquare(square)) {
 			game.markSquare(square, marker);
 			reversePlayers();
-			// dom.displayWinner.innerText = `${players[0].name}'s turn`
 		}
 	}
 
@@ -170,10 +171,6 @@ gamePlay = (function() {
   		square.removeEventListener("click", handleClick)
   	});
 	}
-
-	const game = gameboard()
-
-	const resetBtn = document.getElementById("reset-board")
 
 	resetBtn.addEventListener('click', function() {
 		game.resetBoard();
@@ -249,9 +246,6 @@ gamePlay = (function() {
 	}
 
 	playRound()
-
-
-
 })
 
 domElements = (function () {
