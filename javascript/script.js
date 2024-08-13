@@ -137,8 +137,7 @@ gamePlay = (function() {
 	}
 
 	function setDraw() {
-		player1.domScore.innerText = "Draw";
-		player2.domScore.innerText = "Draw";
+		dom.displayWinner.innerText = "Draw";
 	}
 
 	const addClick = (game) => {
@@ -178,8 +177,8 @@ gamePlay = (function() {
 		playerTurn(game, this, players[0].marker);
 
 		if (currentRound >= rounds && (game.winner(players[1].marker) || game.boardFull())) {
-			removeClick(game)
-			updateScore(players[1])
+			removeClick(game);
+			if (game.winner(players[1].marker)) updateScore(players[1])
 			dom.displayWinner.innerText = gameWinner()
 		} else if (game.winner(players[1].marker)) {
 			removeClick(game)
@@ -220,14 +219,6 @@ gamePlay = (function() {
 		game.resetBoard()
 		addClick(game)
 	}
-
-
-	for (let i = 0; i < rounds; i++) {
-		playRound()
-	}
-
-	// console.log(gameWinner())
-
 })
 
 domElements = (function () {
@@ -244,8 +235,6 @@ domElements = (function () {
 
 	// Reset Buttons
 	const nextRoundBtn = document.getElementById("next-round-btn")
-
-
 
 	return {
 		player1Score, player2Score, round, nextRoundBtn, displayWinner
