@@ -7,21 +7,35 @@
 	<link rel="stylesheet" href="main.css">
 </head>
 <body>
-	<h1> Tic Tac Toe </h1>
-	<p id="round"> Round: 1 </p>
-	<div class="score" id="score">
+	<h1> Tic-Tac-Toe </h1>
+	<div class="main-container">
 		<div>
-			<input type="text" id="player1-name" value="Player 1">
-			<p id="p1-score"> 0 </p>
-			<p> X </p>
-		</div>
-		<div>
-			<input type="text" id="player2-name" value="Player 2">
-			<p id="p2-score"> 0 </p>
-			<p> O </p>
-		</div>
+						<div class='info-block'>
+			<p id="round"> Round: 1 </p>
+				<div class="score-container" id="score">
+					<div class='score-box'>
+						<input type="text" id="player1-name" value="Player 1">
+						<div class="score">
+							<p> X </p>
+							<p id="p1-score"> 0 </p>
+						</div>
+					</div>
+					<div class='score-box'>
+						<input type="text" id="player2-name" value="Player 2">
+						<div class="score">
+							<p> O </p>
+							<p id="p2-score"> 0 </p>
+						</div>
+					</div>
+				</div>
+			<div class = "buttons">
+				<button type="button" id="reset-board"> New Game </button>
+				<button type="button" id="next-round-btn"> Next Round </button>
+			</div>
 	</div>
 	<p id="display-winner"></p>
+</div>
+<div>
 	<div id="board">
 		<div>
 			<span id="A1">  </span>
@@ -39,10 +53,8 @@
 			<span id="C3"> </span>
 		</div>
 	</div>
-	<div class = "buttons">
-		<button type="button" id="reset-board"> New Game </button>
-		<button type="button" id="next-round-btn"> Next Round </button>
 	</div>
+</div>
 	<script src="javascript/script.js"></script>
 </body>
 </html>
